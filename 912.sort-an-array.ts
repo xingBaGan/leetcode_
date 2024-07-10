@@ -39,10 +39,12 @@ function merge_sort(arr: number[]) {
   const len = arr.length;
   if (len <= 1) return arr;
   divide_part(arr, 0, len - 1);
+  return arr;
 }
 
+// 将整体分为左右两部分
 function divide_part(arr: number[], left: number, right: number) {
-  if (right > left) {
+  if (left < right) {
     const mid = Math.floor((right - left) / 2) + left;
     divide_part(arr, left, mid);
     divide_part(arr, mid + 1, right);
@@ -50,11 +52,12 @@ function divide_part(arr: number[], left: number, right: number) {
   }
 }
 
-function merge(arr, left, mid, right) {
+// 升序排序
+function merge(arr: number[], left: number, mid: number, right: number) {
   let p1 = left;
   let p2 = mid + 1;
-  const helper: number[] = [];
-
+  const helper = [] as number[];
+  // 升序
   while (p1 <= mid && p2 <= right) {
     if (arr[p1] <= arr[p2]) {
       helper.push(arr[p1++]);
@@ -70,12 +73,12 @@ function merge(arr, left, mid, right) {
   while (p2 <= right) {
     helper.push(arr[p2++]);
   }
-  // 修改原数组
-  helper.forEach((val, index) => {
-    arr[left + index] = val;
-  });
-}
 
+  // 将helper放入result
+  helper.forEach((val, index) => {
+    arr[index + left] = val;
+  })
+}
 
 // @lc code=end
 
