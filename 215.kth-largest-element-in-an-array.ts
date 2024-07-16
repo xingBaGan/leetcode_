@@ -13,54 +13,46 @@
 // export default
 function findKthLargest(nums: number[], k: number): number {
   const len = nums.length;
-  // 建立最小堆 (还不是有序的)
-  for (let i = 1; i < nums.length; i++) {
-    hangup(nums, i);
-  }
-
-  // i 表示要被排除的
-  for (let i = len - 1; i >= 1; i--) {
+  // 建立最大堆 (还不是有序的)
+  buildLargeHeap(nums);
+  // i 表示要被排除的, 要交换k 次
+  for (let i = len - 1; i >= (len - k); i--) {
     swap(nums, 0, i);
-    maxHeapify(nums, i, 0);
+    heapify(nums, i, 0);
   }
   return nums[len - k];
 };
 
-function getParentIndex(index: number) {
-  return Math.floor((index - 1) / 2);
-}
-
-function swap(arr: number[], a, b) {
-  [arr[a], arr[b]] = [arr[b], arr[a]];
-}
-
-function hangup(arr: number[], i) {
-  let parentIndex = getParentIndex(i);
-  // 建立大根堆
-  while (arr[parentIndex] < arr[i]) {
-    swap(arr, parentIndex, i);
-    i = parentIndex;
-    parentIndex = getParentIndex(i);
-  }
-}
-
-function maxHeapify(arr: number[], n: number, index: number) {
-  const left = index * 2 + 1;
-  const right = index * 2 + 2;
-  let largest = index;
-  if (arr[largest] < arr[left] && left < n) {
+// 建立大根堆
+function heapify(arr: number[], heapSize: number, i: number) {
+  let left = i * 2 + 1;
+  let right = i * 2 + 2;
+  let largest = i;
+  if (left < heapSize && arr[left] > arr[largest]) {
     largest = left;
   }
-
-  if (arr[largest] < arr[right] && right < n) {
+  if (right < heapSize && arr[right] > arr[largest]) {
     largest = right;
   }
-
-  if (largest != index) {
-    swap(arr, largest, index);
-    maxHeapify(arr, n, largest);
+  if (largest != i) {
+    swap(arr, i, largest);
+    heapify(arr, heapSize, largest);
   }
 }
+
+function buildLargeHeap(arr: number[]) {
+  const len = arr.length;
+  for (let i = Math.floor((len - 1) / 2); i >= 0; i--) {
+    heapify(arr, len, i);
+  }
+}
+
+function swap(arr: number[], a: number, b: number) {
+  const temp = arr[a];
+  arr[a] = arr[b];
+  arr[b] = temp;
+}
+
 // @lc code=end
 
 

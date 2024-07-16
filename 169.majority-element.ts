@@ -7,24 +7,34 @@
 
 // @lc code=start
 // 假定数组不为空，并且必定存在超过一般的数
+// 分治
 function majorityElement(nums: number[]): number {
   const len = nums.length;
+  return getMode(nums, 0, len - 1);
+};
+
+function getMode(nums: number[], left: number, right: number): number {
+  // 当只有一个元素时, 返回第一边界元素
+  if (left === right) return nums[left];
+  const mid = Math.floor((right - left) / 2) + left;
+  const l = getMode(nums, left, mid);
+  const r = getMode(nums, mid + 1, right);
+  if (l === r) return l;
+  const lFrequency = getFrequency(nums, left, right, l);
+  const rFrequency = getFrequency(nums, left, right, r);
+  return lFrequency > rFrequency ? l : r;
+}
+
+function getFrequency(nums: number[], left: number, right: number, target: number) {
   let count = 0;
-  let candidate;
-  // 找到超过一半的的数
-  for (let i = 0; i < len; i++) {
-    if (count === 0) {
-      candidate = nums[i]
-      count = 1;
-    } else if (candidate == nums[i]) {
-      count += 1;
-    } else {
-      count -= 1;
+  for (let i = left; i <= right; i++) {
+    if (nums[i] === target) {
+      count++;
     }
   }
+  return count;
+}
 
-  return candidate;
-};
 // @lc code=end
 
 
