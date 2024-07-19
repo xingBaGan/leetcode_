@@ -5,6 +5,10 @@
  * [169] 多数元素
  */
 
+
+// @lcpr-template-start
+
+// @lcpr-template-end
 // @lc code=start
 // 假定数组不为空，并且必定存在超过一般的数
 // 分治
